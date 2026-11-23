@@ -42,7 +42,7 @@ npm install
 npm start                 # kjør appen
 npm run map               # generer Trondheim-kartet på nytt (krever rsvg-convert og ImageMagick)
 npm run dist              # bygg Windows-installer + latest.yml (krever NSIS / makensis)
-npm run release -- "Hva er nytt"   # bygg og publiser som GitHub Release (krever gh)
+npm run release -- "Hva er nytt"   # lag versjons-tag; GitHub Actions bygger og publiserer releasen
 ```
 
 - `tools/generate-map.js` tegner kartet. Geografien er sporet omtrentlig, med ca. 23 m per enhet.

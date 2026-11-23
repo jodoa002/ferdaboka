@@ -18,10 +18,19 @@ fs.writeFileSync(path.join(root, 'build/app-update.yml'),
 
 // 2) app-filer
 fs.rmSync(path.join(root, 'dist'), { recursive: true, force: true });
-run(process.platform === 'win32' ? 'npx.cmd' : 'npx', ['electron-builder', '--win', 'dir', '--x64']);
+if (process.platform === 'win32') {
+  // på Windows kan electron-builder sette ikon og versjonsinfo i Ferdaboka.exe
+  run('npx electron-builder --win dir --x64 -c.win.signAndEditExecutable=true', [], { shell: true });
+} else {
+  run('npx', ['electron-builder', '--win', 'dir', '--x64']);
+}
 
 // 3) installer med NSIS
 let makensis = 'makensis', env = process.env;
+if (process.platform === 'win32') {
+  const guess = ['C:\\Program Files (x86)\\NSIS\\makensis.exe', 'C:\\Program Files\\NSIS\\makensis.exe'].find(f => fs.existsSync(f));
+  if (guess) makensis = guess;
+}
 const cached = path.join(os.homedir(), '.cache/electron-builder/nsis');
 if (process.platform === 'linux' && fs.existsSync(cached)) {
   const dir = path.join(cached, fs.readdirSync(cached).find(d => d.startsWith('nsis-') && !d.includes('resources')));

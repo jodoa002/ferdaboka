@@ -1,14 +1,11 @@
-// Legger ut gjeldende versjon som GitHub Release, slik at installerte apper oppdaterer seg.
-// Kjør: npm run release   (krever innlogget gh CLI)
-// Endringsnotat kan gis slik: npm run release -- "Hva som er nytt"
+// Publiserer gjeldende versjon: lager en tag (v<versjon>) med endringsnotat og laster den opp.
+// GitHub Actions (.github/workflows/release.yml) bygger da installeren på Windows og legger ut releasen.
+// Kjør: npm run release -- "Hva som er nytt"
 const { execFileSync } = require('child_process');
-const path = require('path');
 const pkg = require('../package.json');
-
-const V = pkg.version, tag = `v${V}`;
-const { owner, repo } = pkg.updates;
-const notes = process.argv[2] || `Ferdaboka ${V}`;
-const dist = path.join(__dirname, '../dist');
-execFileSync('gh', ['release', 'create', tag, '--repo', `${owner}/${repo}`, '--title', `Ferdaboka ${V}`, '--notes', notes,
-  path.join(dist, `Ferdaboka-Setup-${V}.exe`), path.join(dist, 'latest.yml')], { stdio: 'inherit' });
-console.log(`Publisert ${tag}. Installerte apper henter oppdateringen neste gang de starter.`);
+const tag = `v${pkg.version}`;
+const notes = process.argv[2] || `Ferdaboka ${pkg.version}`;
+const git = (...a) => execFileSync('git', a, { stdio: 'inherit' });
+git('tag', '-a', tag, '-m', notes);
+git('push', 'origin', tag);
+console.log(`Lastet opp ${tag}. Følg byggingen under «Actions» på GitHub; installerte apper oppdaterer seg når releasen er ute.`);

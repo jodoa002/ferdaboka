@@ -11,7 +11,7 @@
     "water": "python3 tools/extract-water.py referanse.png tools/geo.json",
     "map": "node tools/generate-map.js && rsvg-convert -z 2 -o build/trondheim.png assets/trondheim.svg && convert build/trondheim.png -quality 88 assets/maps/trondheim.jpg",
     "dist": "node tools/build-win.js",
-    "release": "node tools/build-win.js && node tools/release.js"
+    "release": "node tools/release.js"
   },
   "devDependencies": {
     "electron": "^33.2.0",
