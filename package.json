@@ -1,0 +1,53 @@
+{
+  "name": "ferdaboka",
+  "productName": "Ferdaboka",
+  "version": "1.1.0",
+  "description": "Kartbok for turer i Ringenes herre-stil",
+  "main": "src/main.js",
+  "author": "Ferdaboka",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "water": "python3 tools/extract-water.py referanse.png tools/geo.json",
+    "map": "node tools/generate-map.js && rsvg-convert -z 2 -o build/trondheim.png assets/trondheim.svg && convert build/trondheim.png -quality 88 assets/maps/trondheim.jpg",
+    "dist": "node tools/build-win.js",
+    "release": "node tools/build-win.js && node tools/release.js"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "no.ferdaboka.app",
+    "productName": "Ferdaboka",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "assets/fonts/**/*",
+      "assets/maps/**/*",
+      "assets/icon.png",
+      "package.json"
+    ],
+    "win": {
+      "target": "dir",
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "extraResources": [
+      {
+        "from": "build/app-update.yml",
+        "to": "app-update.yml"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
+  },
+  "updates": {
+    "owner": "jodoa002",
+    "repo": "ferdaboka"
+  }
+}
